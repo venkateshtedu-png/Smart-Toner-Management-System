@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login | Smart Toner Management</title>
+  <style>
+    :root{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#1b2130;background:#f4f6fa}
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:20px}
+    .panel{width:min(420px,100%);background:white;border:1px solid #e2e6ee;border-radius:16px;padding:28px;box-shadow:0 10px 35px #16203a0c}
+    h1{font-size:22px;margin:0 0 6px}.muted{color:#6b7385;font-size:13px;margin:0 0 22px}
+    label{display:block;font-size:12px;font-weight:700;margin:14px 0 6px}input{width:100%;padding:11px;border:1px solid #d9dfeb;border-radius:8px;font:inherit}
+    button{width:100%;margin-top:18px;border:0;border-radius:8px;padding:11px;background:#2f5bea;color:white;font-weight:700;font:inherit;cursor:pointer}
+    .error{background:#fdeaea;color:#a42323;border:1px solid #f0c3c3;border-radius:8px;padding:10px;font-size:13px;margin:12px 0}
+    .links{display:flex;justify-content:space-between;gap:12px;margin-top:16px;font-size:12px}a{color:#2f5bea;text-decoration:none}a:hover{text-decoration:underline}
+  </style>
+</head>
+<body><main class="panel">
+  <h1>Smart Toner Management</h1>
+  <p class="muted">Sign in to manage inventory and stock movements.</p>
+  {% if error %}<div class="error" role="alert">{{ error }}</div>{% endif %}
+  <form method="post" action="{{ url_for('login') }}">
+    <label for="username">Username</label><input id="username" name="username" autocomplete="username" required autofocus>
+    <label for="password">Password</label><input id="password" name="password" type="password" autocomplete="current-password" required>
+    <button type="submit">Sign in</button>
+  </form>
+  <div class="links"><a href="{{ url_for('forgot_password') }}">Forgot password?</a></div>
+</main></body></html>

@@ -1,0 +1,4 @@
+requirements.txt:1: trailing whitespace.
+[32m+[m[32mFlask>=3.0,<4.0[m[41m[m
+requirements.txt:2: trailing whitespace.
+[32m+[m[32mWerkzeug>=3.0,<4.0[m[41m[m

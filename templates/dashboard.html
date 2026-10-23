@@ -1,0 +1,1337 @@
+  <!doctype html>
+  <html lang="en">
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Smart Toner Management System</title>
+  <style>
+  :root{color-scheme:light;--bg:#f4f6fa;--card:#fff;--tx:#1b2130;--mu:#6b7385;--bd:#e2e6ee;--ac:#2f5bea;--ok:#1a9a5b;--wa:#d98a00;--er:#d83a3a;--sb:#151b2e;--soft:#edf2ff;--shadow:0 2px 8px rgba(24,35,65,.045)}
+  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:13px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;display:flex;min-height:100vh}button,input,select,textarea{font:inherit}button{cursor:pointer}
+  aside{width:224px;flex:0 0 224px;background:var(--sb);color:#cfd6ea;padding:18px 12px;display:flex;flex-direction:column;gap:5px}aside h1{font-size:16px;color:#fff;margin:0 8px 18px;display:flex;align-items:center;gap:8px}aside button{display:block;width:100%;text-align:left;background:transparent;border:0;color:inherit;padding:10px 12px;border-radius:8px;font-size:13px;margin-bottom:2px}aside button:hover{background:#ffffff14}aside button.on{background:var(--ac);color:#fff}aside .nav-note{margin:auto 8px 0;color:#7f8aa8;font-size:10px}
+  main{flex:1;min-width:0;padding:22px;max-width:calc(100vw - 224px)}.topline{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}.topline h2{font-size:21px;margin:0}.live{display:flex;align-items:center;gap:7px;color:#167746;background:#eaf8f0;border:1px solid #c4ebd4;border-radius:999px;padding:6px 10px;font-size:10px;font-weight:700;white-space:nowrap}.dot{width:7px;height:7px;border-radius:50%;background:#1a9a5b}
+  .view{display:none}.view.show{display:block}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:7px;margin-bottom:16px;align-items:stretch}.metric{background:var(--card);border:1px solid var(--bd);border-radius:10px;min-width:0;padding:10px 8px;min-height:76px;cursor:pointer;box-shadow:var(--shadow);text-align:left;color:inherit;transition:border .15s,transform .15s;display:flex;flex-direction:column;justify-content:center}.metric:hover{border-color:var(--ac);transform:translateY(-1px)}.metric.active{border:2px solid var(--ac);padding:9px 7px}.metric .num{font-size:20px;line-height:1.1;font-weight:800;letter-spacing:-.5px}.metric .label{margin-top:6px;color:var(--mu);font-size:9px;line-height:1.2;overflow-wrap:anywhere}
+  .card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px;margin-bottom:15px;box-shadow:var(--shadow);min-width:0}.card-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}.card h3{font-size:14px;margin:0}.muted{color:var(--mu)}.small{font-size:11px}.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+  .table-scroll{overflow:auto;max-height:430px;border-radius:7px}table{width:100%;border-collapse:collapse;font-size:11px}th,td{padding:8px 9px;text-align:left;border-bottom:1px solid var(--bd);white-space:nowrap;vertical-align:middle}th{color:var(--mu);font-weight:700;position:sticky;top:0;background:var(--card);z-index:2}td.wrap{white-space:normal;min-width:160px}
+  .tag{display:inline-block;padding:2px 7px;border-radius:999px;font-size:10px;font-weight:700;background:#edf2ff;color:var(--ac)}.tag.ok{background:#eaf8f0;color:#187747}.tag.wa{background:#fff3df;color:#946000}.tag.er{background:#fdeaea;color:#b72828}.tag.gray{background:#eef1f6;color:#536076}
+  .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 13px}.field{min-width:0}.field label{display:block;margin:0 0 5px;color:var(--mu);font-size:11px;font-weight:700}.field input,.field select,.field textarea{width:100%;padding:9px 10px;border:1px solid var(--bd);border-radius:8px;background:#fff;color:var(--tx);outline:none}.field input:focus,.field select:focus,.field textarea:focus{border-color:#8ea8fc;box-shadow:0 0 0 3px #2f5bea12}
+  .actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:13px}.btn{background:var(--ac);color:white;border:0;border-radius:8px;padding:9px 14px;font-weight:700;font-size:11px}.btn:hover{filter:brightness(.95)}.btn.secondary{background:#e9edf5;color:#37445c}.btn.danger{background:var(--er)}.btn.green{background:var(--ok)}.btn.orange{background:var(--wa)}.btn:disabled{opacity:.55;cursor:not-allowed}
+  .tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}.tabs button{flex:1;min-width:80px;padding:8px 10px;border:1px solid var(--bd);background:#f8faff;color:#506079;border-radius:8px;font-weight:700;font-size:11px}.tabs button.on{background:var(--ac);border-color:var(--ac);color:#fff}
+  .message{display:none;padding:9px 11px;border-radius:8px;margin:10px 0;font-size:11px;font-weight:700}.message.show{display:block}.message.success{background:#eaf8f0;border:1px solid #bde9ce;color:#176b42}.message.error{background:#fdeaea;border:1px solid #f0c3c3;color:#a42323}.empty{padding:24px 12px;color:var(--mu);text-align:center;font-size:12px}.section-title{font-size:14px;margin:15px 0 8px}.footnote{color:var(--mu);font-size:10px;margin-top:7px}
+  .stockline{display:flex;align-items:center;gap:8px}.stockbar{height:7px;min-width:60px;max-width:115px;background:#e8edf4;border-radius:99px;overflow:hidden}.stockbar i{display:block;height:100%;background:var(--ok)}.low-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}.low-tags .tag{padding:4px 8px}.right{margin-left:auto}.hidden{display:none!important}.search{width:min(260px,100%);padding:8px 10px;border:1px solid var(--bd);border-radius:8px}.inline{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.subnav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.subnav button{border:1px solid var(--bd);border-radius:8px;background:#fff;padding:8px 10px;font-size:11px;color:var(--tx)}.subnav button.on{background:var(--soft);border-color:#c9d5ff;color:var(--ac);font-weight:700}
+  @media(max-width:1500px){.grid{grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px}.metric{padding:8px 5px;min-height:70px}.metric .num{font-size:18px}.metric .label{font-size:8px}}
+  @media(max-width:1150px){body{display:block}aside{width:100%;flex-direction:row;overflow-x:auto;align-items:center;padding:9px;position:sticky;top:0;z-index:10}aside h1{display:none}aside button{width:auto;white-space:nowrap;margin:0;padding:9px 11px}aside .nav-note{display:none}main{max-width:none;padding:14px}.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.two{grid-template-columns:1fr}}
+  @media(max-width:680px){main{padding:10px}.topline{align-items:flex-start;flex-direction:column}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.form-grid{grid-template-columns:1fr}.metric .label{font-size:10px}.metric .num{font-size:22px}.card{padding:11px}.table-scroll{max-height:380px}}
+  </style>
+  </head>
+  <body>
+  <aside>
+    <h1>🖨️ TonerSmart</h1>
+    <button class="nav on" data-view="dash">📊 Dashboard</button>
+    <button class="nav" data-view="ops">🔄 Issue / Return / Refill</button>
+    <button class="nav" data-view="assets">🗂️ Add / Remove Asset</button>
+    <button class="nav" data-view="transactions">📜 Transactions</button>
+    <button class="nav" data-view="inventory">📦 Inventory</button>
+    <button class="nav" data-view="email">✉️ Email Settings</button>
+    <button onclick="window.location.href='/change-password'">🔑 Change password</button>
+    <button onclick="window.location.href='/logout'">↪ Log out</button>
+    <div class="nav-note">Live data from database.db</div>
+  </aside>
+
+  <main>
+    <div class="topline">
+      <h2 id="pageTitle">Dashboard</h2>
+      <div class="inline">
+        <div class="live"><span class="dot"></span><span id="liveStatus">Connecting to database…</span></div>
+        <button class="btn secondary" onclick="loadAll(false)">Refresh</button>
+      </div>
+    </div>
+
+    <section class="view show" id="view-dash">
+      <div class="grid" id="kpiGrid"></div>
+
+      <!-- ADDED: Toner stock cards. Existing dashboard cards above are unchanged. -->
+      <h3 class="section-title" style="margin-top:0">📦 Toner stock</h3>
+      <div class="grid" id="tonerStockKpiGrid"></div>
+      <section class="card" id="detailPanel"><div class="card-head"><h3>Dashboard details</h3><span class="muted small">Click a card to view its real records</span></div><div class="empty">Loading database records…</div></section>
+      <section class="card"><div class="card-head"><h3>⚠ Low stock alert</h3><span class="tag wa" id="lowStockCount">0 records</span></div><div class="low-tags" id="lowStockTags"><span class="muted small">No low stock records.</span></div></section>
+      <div class="two">
+        <section class="card"><div class="card-head"><h3>Toner stock &amp; status</h3><span class="muted small">Normal + refill inventory</span></div><div class="table-scroll" id="stockSnapshot"></div></section>
+        <section class="card"><div class="card-head"><h3>Recent transactions</h3><button class="btn secondary" onclick="switchView('transactions')">View all</button></div><div class="table-scroll" id="recentTransactions"></div></section>
+      </div>
+    </section>
+
+    <section class="view" id="view-ops">
+      <div class="two">
+        <section class="card">
+          <h3>Issue / Return / Refill Toners</h3>
+          <div class="tabs" id="operationTabs"><button class="on" data-action="ISSUE">Issue</button><button data-action="RETURN">Return</button><button data-action="REFILL">Refill stock</button></div>
+          <div class="field"><label for="opInventory">Inventory Type</label><select id="opInventory"><option value="normal">Normal toner / cartridge</option><option value="refill">Saved refill inventory</option></select></div>
+          <div class="field"><label for="opColour">Color</label><select id="opColour"><option value="">Select color</option><option>Black</option><option>Cyan</option><option>Magenta</option><option>Yellow</option><option>Normal</option><option>Not Specified</option></select></div>
+          <div class="field"><label for="opUser">User</label><input id="opUser" list="opUserList" placeholder="Enter or select user"><datalist id="opUserList"></datalist><div class="footnote">Selecting a user automatically finds matching toner/cartridge inventory.</div></div>
+          <div class="field"><label for="opRecord">Toner / Cartridge</label><input id="opRecord" list="opRecordList" placeholder="Automatically filled from user; select if multiple" required><datalist id="opRecordList"></datalist></div>
+          <div class="form-grid"><div class="field"><label for="opQuantity">Quantity</label><input type="number" id="opQuantity" min="1" step="1" value="1" required></div><div class="field"><label for="opRemarks">Remarks (optional)</label><input id="opRemarks" type="text" placeholder="Reason or notes"></div></div>
+          <div class="message" id="opMessage" role="status"></div>
+          <div class="actions"><button class="btn" id="opSubmit" onclick="performOperation()">Submit Issue</button><button class="btn secondary" onclick="loadAll(false)">Refresh stock</button></div>
+        </section>
+        <section class="card"><div class="card-head"><h3>Selected inventory</h3><span class="tag in" id="opTypeBadge">NORMAL</span></div><div id="opSummary" class="info">Select a record to see its live stock.</div><div class="footnote">Issue reduces available stock. Return increases stock only within the currently issued balance. Refill stock adds quantity to a saved refill record. There is no refill-cycle limit.</div></section>
+      </div>
+      <section class="card"><div class="card-head"><h3>Recent operations</h3><button class="btn secondary" onclick="switchView('transactions')">Open transaction history</button></div><div class="table-scroll" id="opsRecent"></div></section>
+    </section>
+
+    <section class="view" id="view-assets">
+      <div class="subnav">
+        <button class="on" data-subview="normalAsset">Add normal toner / asset</button>
+        <button data-subview="refillAsset">Add refill inventory</button>
+        <button data-subview="assetList">Manage saved assets</button>
+        <button data-subview="refillList">Manage refill inventory</button>
+      </div>
+
+      <div id="sub-normalAsset">
+        <section class="card">
+          <h3>Add Normal Toner Inventory / Asset</h3>
+          <div class="muted small">Saves the asset and its normal toner stock to SQLite. No sample records are created.</div>
+          <form id="normalAssetForm">
+            <div class="form-grid">
+              <div class="field"><label for="assetNo">Asset No</label><input id="assetNo" required></div>
+
+              <div class="field">
+                <label for="assetDeviceType">Printer / Scanner Type</label>
+                <select id="assetDeviceType" required>
+                  <option value="Printer">Printer</option>
+                  <option value="Scanner">Scanner</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="assetDescription">Asset Description</label>
+                <textarea id="assetDescription" rows="3" required placeholder="e.g. HP LaserJet printer, black toner cartridge"></textarea>
+              </div>
+              <div class="field"><label for="assetUser">Assigned User</label><div class="inline"><input id="assetUser" list="assetUserList" required></div><datalist id="assetUserList"></datalist></div>
+              <div class="field"><label for="assetLocation">Location</label><input id="assetLocation" list="assetLocationList" required><datalist id="assetLocationList"></datalist></div>
+
+              <div class="field">
+                <label for="assetModel">Normal Toner / Cartridge Model</label>
+                <input id="assetModel" list="assetModelList" autocomplete="off" placeholder="e.g. Brand Model A, Brand Model B">
+                <datalist id="assetModelList"></datalist>
+                <div class="muted small">Start typing to see saved models. A new model is saved to the database and suggested automatically next time.</div>
+              </div>
+
+              <div class="field">
+                <label for="assetToner">Toner / Cartridge Part Type</label>
+                <input id="assetToner" list="normalPartTypeList" autocomplete="off" placeholder="e.g. Toner, Cartridge, Drum">
+                <datalist id="normalPartTypeList">
+                  <option value="Toner"></option><option value="Cartridge"></option><option value="Drum"></option><option value="Ribbon"></option><option value="Normal"></option>
+                </datalist>
+              </div>
+
+              <div class="field">
+                <label for="assetColour">Colour / Part (Optional)</label>
+                <select id="assetColour">
+                  <option value="">Not Specified</option>
+                  <option value="Black">Black</option>
+                  <option value="Cyan">Cyan</option>
+                  <option value="Magenta">Magenta</option>
+                  <option value="Yellow">Yellow</option>
+                  <option value="Normal">Normal</option>
+                </select>
+              </div>
+
+              <div class="field"><label for="assetStock">Initial Stock</label><input id="assetStock" type="number" min="0" step="1" value="0" required></div>
+              <div class="field"><label for="assetMinimum">Minimum Stock</label><input id="assetMinimum" type="number" min="1" step="1" value="5" required></div>
+            </div>
+
+            <div class="message" id="assetMessage"></div>
+            <div class="actions">
+              <button class="btn" id="assetSubmitButton" type="submit">Save Asset &amp; Toner</button>
+              <button class="btn secondary" id="cancelAssetEditButton" type="button" onclick="cancelAssetEdit()" hidden>Cancel Edit</button>
+              <button class="btn secondary" type="button" onclick="cancelAssetEdit()">Clear Form</button>
+            </div>
+          </form>
+        </section>
+      </div>
+
+      <div id="sub-refillAsset" class="hidden">
+        <section class="card">
+          <h3>Add Refill Inventory</h3>
+          <div class="muted small">Creates a separate refill inventory record. Refill data is kept in the database and may be refilled without a cycle limit.</div>
+          <form id="refillAssetForm">
+            <div class="form-grid">
+              <div class="field"><label for="refillDescription">Refill Inventory Name / Description</label><input id="refillDescription" list="refillDescriptionList" autocomplete="off" required placeholder="e.g. Refill of toner and drum for a model"><datalist id="refillDescriptionList"></datalist><div class="muted small">Start typing to see saved refill labels. New labels are saved to the database and suggested next time.</div></div>
+              <div class="field"><label for="refillAssetNo">Asset No</label><input id="refillAssetNo" required></div>
+              <div class="field"><label for="refillCartridge">Toner / Cartridge Part Type</label><input id="refillCartridge" list="refillPartTypeList" autocomplete="off" required placeholder="e.g. Toner, Cartridge, Drum"><datalist id="refillPartTypeList"><option value="Toner"></option><option value="Cartridge"></option><option value="Drum"></option><option value="Ribbon"></option><option value="Normal"></option></datalist></div>
+              <div class="field"><label for="refillUser">Assigned User</label><div class="inline"><input id="refillUser" list="assetUserList" required><button class="btn secondary" type="button" title="Delete selected user" onclick="deleteSelectedUser('refillUser')">×</button></div></div>
+              <div class="field"><label for="refillColour">Colour / Part (Optional)</label><select id="refillColour"><option value="">Not Specified</option><option value="Black">Black</option><option value="Cyan">Cyan</option><option value="Magenta">Magenta</option><option value="Yellow">Yellow</option><option value="Normal">Normal</option></select></div>
+              <div class="field"><label for="refillLocation">Location</label><input id="refillLocation" list="assetLocationList" required></div>
+              <div class="field"><label for="refillStock">Initial Stock</label><input id="refillStock" type="number" min="0" step="1" value="0" required></div>
+              <div class="field"><label for="refillMinimum">Minimum Stock</label><input id="refillMinimum" type="number" min="1" step="1" value="5" required></div>
+            </div>
+            <div class="message" id="refillAddMessage"></div>
+            <div class="actions"><button class="btn orange" id="refillSubmitButton" type="submit">Save Refill Data</button><button class="btn secondary" id="cancelRefillEditButton" type="button" onclick="cancelRefillEdit()" hidden>Cancel Edit</button><button class="btn secondary" type="button" onclick="cancelRefillEdit()">Clear Form</button></div>
+          </form>
+        </section>
+      </div>
+
+      <div id="sub-assetList">
+        <section class="card">
+          <div class="card-head"><h3>Saved Assets / Normal Toner Inventory</h3><input class="search" id="assetSearch" placeholder="Search asset no, description, user, location"></div>
+          <div class="table-scroll" id="assetTable"></div>
+        </section>
+      </div>
+
+      <div id="sub-refillList" class="hidden">
+        <section class="card">
+          <div class="card-head"><h3>Saved Refill Inventory</h3><input class="search" id="refillSearch" placeholder="Search refill, asset no, location"></div>
+          <div class="message" id="refillListMessage" role="status" aria-live="polite"></div>
+          <div class="table-scroll" id="refillTable"></div>
+        </section>
+      </div>
+    </section>
+
+    <section class="view" id="view-transactions"><section class="card"><div class="card-head"><h3>Transaction History</h3><input class="search" id="transactionSearch" placeholder="Search transaction, asset, toner, user"></div><div class="table-scroll" id="transactionsTable"></div></section></section>
+    <section class="view" id="view-inventory"><section class="card"><div class="card-head"><h3>All Normal + Refill Inventory</h3><input class="search" id="inventorySearch" placeholder="Search toner, asset, location"></div><div class="table-scroll" id="inventoryTable"></div></section></section>
+
+    <section class="view" id="view-email">
+      <section class="card">
+        <div class="card-head"><h3>Email / SMTP Settings</h3><span class="tag" id="emailSettingsStatus">Not loaded</span></div>
+        <p class="muted small">Enter your outgoing mail server and the address(es) that should receive Smart Toner stock alerts. These settings are saved in the application's SQLite database.</p>
+        <form id="emailSettingsForm">
+          <div class="form-grid">
+            <div class="field"><label for="emailSmtpServer">SMTP Server / Host</label><input id="emailSmtpServer" required placeholder="e.g. smtp.gmail.com"></div>
+            <div class="field"><label for="emailSmtpPort">SMTP Port</label><input id="emailSmtpPort" type="number" min="1" max="65535" value="587" required></div>
+            <div class="field"><label for="emailSmtpSecurity">Connection Security</label><select id="emailSmtpSecurity"><option value="TLS">STARTTLS / TLS (usually port 587)</option><option value="SSL">SSL (usually port 465)</option><option value="NONE">None (internal mail relay only)</option></select></div>
+            <div class="field"><label for="emailSmtpUsername">SMTP Username / Sending Account</label><input id="emailSmtpUsername" autocomplete="username" placeholder="you@example.com"></div>
+            <div class="field"><label for="emailSmtpPassword">SMTP Password / App Password</label><input id="emailSmtpPassword" type="password" autocomplete="new-password" placeholder="Leave blank to keep the saved password"><div class="footnote">For Gmail, use an App Password if your account requires it. The saved password is not displayed here.</div></div>
+            <div class="field"><label for="emailSender">Sender Email</label><input id="emailSender" type="email" placeholder="alerts@example.com"></div>
+            <div class="field"><label for="emailReceiver">Alert Recipient Email (required)</label><input id="emailReceiver" type="email" required placeholder="person@example.com"></div>
+            <div class="field"><label for="emailReceiver2">Second Alert Recipient (optional)</label><input id="emailReceiver2" type="email" placeholder="second-person@example.com"></div>
+            <div class="field"><label for="emailMinimumStock">Default Minimum Stock</label><input id="emailMinimumStock" type="number" min="1" step="1" value="5" required></div>
+          </div>
+          <h4 class="section-title">Alert types</h4>
+          <div class="form-grid">
+            <label class="inline"><input id="emailLowStock" type="checkbox" checked> Low stock alerts</label>
+            <label class="inline"><input id="emailDangerStock" type="checkbox" checked> Nill stock alerts</label>
+            <label class="inline"><input id="emailDeadStock" type="checkbox" checked> Out-of-stock alerts</label>
+            <label class="inline"><input id="emailOverstock" type="checkbox" checked> Overstock alerts</label>
+          </div>
+          <div class="message" id="emailSettingsMessage" role="status"></div>
+          <div class="actions"><button class="btn" id="saveEmailSettingsButton" type="submit">Save Email Settings</button><button class="btn green" id="testEmailButton" type="button">Save &amp; Send Test Email</button><button class="btn secondary" id="reloadEmailSettingsButton" type="button">Reload Saved Settings</button></div>
+        </form>
+      </section>
+    </section>
+  </main>
+
+  <script>
+  const $=id=>document.getElementById(id);
+  const esc=value=>String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const norm=value=>String(value??"").trim().toLowerCase().replace(/\s+/g," ");  const tonerKey=value=>norm(String(value??"")).replace(/[^a-z0-9]+/g,"");  const num=(value,def=0)=>{const n=Number(value);return Number.isFinite(n)?n:def};
+  function tonerTypeKey(value){
+    const raw=canonicalTonerName(value);
+    if(!raw)return "";
+    const normalized=raw.replace(/\b(?:TONER|DRUM|CARTRIDGE|PART|NORMAL)\b/gi,' ').replace(/\b(?:BLACK|CYAN|MAGENTA|YELLOW)\b/gi,' ').replace(/[+\-]/g,' ').replace(/\s+/g,' ').trim();
+    return tonerKey(normalized) || tonerKey(raw);
+  }
+  function canonicalTonerName(value){
+    const raw=String(value??"").trim();
+    if(!raw)return "";
+    return raw
+      .replace(/BLCAK/gi,"BLACK")
+      .replace(/MEGANTA/gi,"MAGENTA")
+      .replace(/YELLO/gi,"YELLOW")
+      .replace(/CARTRIDGR/gi,"CARTRIDGE")
+      .replace(/\s*\+\s*/g,"+")
+      .replace(/\s+/g," ")
+      .trim()
+      .replace(/\b(?:TONER|DRUM|CARTRIDGE|PART|NORMAL|BLACK|CYAN|MAGENTA|YELLOW|RIBBON)\b/gi,match=>match.toUpperCase());
+  }
+  function formatNormalOnlyText(value){
+    const text=canonicalTonerName(value);
+    return text.replace(/\s*\+\s*/g,"+").replace(/\s+/g," ").trim();
+  }
+  // Reject blank, generic, and known test/description values, but do not
+  // whitelist only a fixed set of toner models. Any real model stored in the
+  // database is counted, including models added in the future.
+  function isRealTonerName(value){
+    const raw=canonicalTonerName(value);
+    if(!raw)return false;
+    const key=tonerKey(raw);
+    if(!key)return false;
+    const junk=new Set([
+      'normal','toner','drum','cartridge','part','standard','notspecified',
+      'notapplicable','none','null','undefined','na','n/a',
+      'unknown','test','sample','placeholder',
+      'tonerblackcyanmagentayellow','tonerblackcyanyellowmeganta',
+      'blackcyanmagentayellow','blackcyanyellowmeganta'
+    ]);
+    if(junk.has(key))return false;
+    // These are descriptive refill labels, not inventory model names. The
+    // refill resolver below extracts the model from these labels when possible.
+    if(/^refill(?:of|for|toner|cartridge)/.test(key))return false;
+    if(key.includes('black')&&key.includes('cyan')&&key.includes('magenta')&&key.includes('yellow'))return false;
+    if(key.includes('black')&&key.includes('cyan')&&key.includes('yellow')&&key.includes('meganta'))return false;
+    return true;
+  }
+
+  // Extract a model name from a refill description using generic rules.
+  // No customer-specific product catalogue is embedded in this frontend.
+  function extractTonerTypeFromDescription(value){
+    const raw=canonicalTonerName(value);
+    if(!raw)return '';
+    if(!/refill|with\s+drum|toner\s+with\s+drum/i.test(raw))return '';
+
+    const stripped=raw
+      .replace(/\b(?:REFILL|OF|TONER|DRUM|CARTRIDGE|WITH|FOR|THE|AND)\b/gi,' ')
+      .replace(/[&()[\],:_-]+/g,' ')
+      .replace(/\s+/g,' ')
+      .trim();
+    if(!stripped)return '';
+
+    // Accept descriptions where a model number was written before its name,
+    // without listing any particular brand or model in source code.
+    const reversed=stripped.match(/^(\d{2,6}[A-Z]?)\s+([A-Z][A-Z0-9-]+)$/i);
+    const candidate=reversed
+      ? `${reversed[2]} ${reversed[1]}`
+      : stripped;
+    const cleaned=canonicalTonerName(candidate);
+    return isRealTonerName(cleaned)?cleaned:'';
+  }
+
+  let assets=[],toners=[],refills=[],users=[],locations=[],transactions=[];
+  let activeView="dash",activeSubView="normalAsset",selectedKpi="all",operation="ISSUE",busy=false,lastUpdated=null,detailSearch="";
+  let selectedOperationRecordId=null;
+  let editingAssetId=null;
+  let editingRefillId=null;
+
+  const KPI=[
+  ["Total Assets","all"],["Printers","printers"],["Scanners","scanners"],["Asset Descriptions","descriptions"],["Toner Types","tonerTypes"],["Cartridge Types (part/color-wise)","cartridgeTypes"],["Total Toners / Cartridges","totalToners"],["Refill + Normal","refillNew"],["Normal Only","newOnly"],["Users","users"],["Locations","locations"]
+  ];
+
+  // ADDED: Separate toner-stock cards; these do not change the existing KPI logic.
+  const TONER_STOCK_KPI=[
+    ["Available Units","availableUnits"],
+    ["New Units","newUnits"],
+    ["Refilled Units","refilledUnits"],
+    ["Empty","empty"],
+    ["Out of Stock","outOfStock"],
+    ["Low / Understock","understock"],
+    ["Overstock","overstock"],
+    ["Dead Stock (30d+)","deadStock"],
+    ["Healthy","healthy"]
+  ];
+  let selectedStockKpi=null;
+
+  function getAssetNo(a){return String(a?.asset_no||a?.asset_number||a?.asset_name||"").trim()}
+  function getAssetDescription(a){return String(a?.asset_description||a?.asset_type||"").trim()}
+  function getAssetDeviceType(a){
+  const saved=String(a?.device_type||"").trim();
+  if(saved)return saved;
+  return norm(getAssetDescription(a)).includes("scanner")?"Scanner":"Printer";
+  }
+  function isScanner(a){return norm(getAssetDeviceType(a))==="scanner"}
+  function tonerName(t){return String(t?.toner_model||t?.toner_cartridge||t?.model_name||t?.refill_name||t?.refill_type||"").trim()}
+  function refillName(r){return String(r?.refill_name||r?.refill_type||r?.toner_model||r?.toner_cartridge||"").trim()}
+  function refillTypeName(r){
+    const directValues=[r?.toner_cartridge,r?.toner_model,r?.refill_type];
+    for(const value of directValues){
+      const direct=canonicalTonerName(value);
+      if(direct&&isRealTonerName(direct))return direct;
+    }
+    const description=refillName(r);
+    const extracted=extractTonerTypeFromDescription(description);
+    if(extracted)return extracted;
+    const fallback=canonicalTonerName(directValues.find(value=>String(value??'').trim())||'');
+    return fallback&&isRealTonerName(fallback)?fallback:'';
+  }
+  function refillAssetNo(r){return String(r?.asset_no||r?.asset_number||"").trim()}
+  function recLocation(r){return String(r?.location||r?.location_name||r?.asset_location||"").trim()}
+  function stockOf(r){return Math.max(0,num(r?.quantity??r?.stock,0))}
+  function uniqueAssetRows(rows){const m=new Map();(rows||[]).forEach(a=>{const no=getAssetNo(a);if(no){const k=norm(no);if(!m.has(k))m.set(k,a)}});return [...m.values()]}
+  // Display one row per unique physical Asset No without deleting or changing
+  // any saved records. Distinct toner/part and colour information is combined
+  // into the single asset row; repeated variants do not inflate its displayed stock.
+  function uniqueAssetDisplayRows(rows){
+    const groups=new Map();
+    (rows||[]).forEach(a=>{
+      const no=getAssetNo(a);
+      if(!no)return;
+      const key=norm(no);
+      if(!groups.has(key))groups.set(key,{base:a,records:[]});
+      groups.get(key).records.push(a);
+    });
+    const uniqueText=(records,reader)=>[...new Set(records.map(reader).map(v=>String(v??'').trim()).filter(Boolean))];
+    return [...groups.values()].map(({base,records})=>{
+      const stockByVariant=new Map();
+      records.forEach(a=>{
+        const variant=norm([a.toner_model||'',a.toner_cartridge||'',a.colour||a.color||''].join('|'))||'default';
+        const stock=Math.max(0,num(a.stock,0));
+        // If the same asset/toner/colour was duplicated, keep one stock value
+        // (the greatest saved value) rather than adding the duplicate row twice.
+        stockByVariant.set(variant,Math.max(stockByVariant.get(variant)||0,stock));
+      });
+      const models=uniqueText(records,a=>a.toner_cartridge||a.toner_model||'');
+      const colours=uniqueText(records,a=>a.colour||a.color||'');
+      return {
+        ...base,
+        device_type:uniqueText(records,getAssetDeviceType).join(', ')||getAssetDeviceType(base),
+        asset_description:uniqueText(records,getAssetDescription).join(' | ')||getAssetDescription(base),
+        user:uniqueText(records,a=>a.user).join(', '),
+        location:uniqueText(records,a=>a.location).join(', '),
+        toner_cartridge:models.join(', '),
+        colour:colours.join(', ')||'Not Specified',
+        stock:[...stockByVariant.values()].reduce((sum,value)=>sum+value,0)
+      };
+    });
+  }
+  function addValidTonerTypes(targetMap, rows, nameReader){rows.forEach(r=>{const n=canonicalTonerName(nameReader(r));if(n&&isRealTonerName(n)){const key=tonerTypeKey(n);if(key&& !targetMap.has(key))targetMap.set(key,n)}});return targetMap}
+  function normalTypes(){return addValidTonerTypes(new Map(), toners, tonerName)}
+  function inventoryTypes(){const m=addValidTonerTypes(new Map(), toners, tonerName);return addValidTonerTypes(m, refills, refillTypeName)}
+  function refillRecordNameSet(){const s=new Set();refills.forEach(r=>{const name=canonicalTonerName(refillTypeName(r));if(name&&isRealTonerName(name)){const key=tonerTypeKey(name); if(key) s.add(key)}});return s}
+  function getColors(name,field=""){
+  const text=(String(name||"")+" "+String(field||"")).toUpperCase();
+  if(text.includes("TONER")&&text.includes("DRUM"))return ["TONER","DRUM"];
+  const rules=[["BLACK",/BLACK|BLCAK|\bBK\b|\bPBK\b/],["CYAN",/CYAN/],["MAGENTA",/MAGENTA|MEGANTA/],["YELLOW",/YELLOW|YELLO/]];
+  const found=rules.filter(([,re])=>re.test(text)).map(([c])=>c);
+  if(found.length)return found;
+  const col=String(field||"").trim();if(col&&norm(col)!=="not specified")return [col.toUpperCase()];
+  return ["STANDARD"];
+  }
+  // One row per unique toner/cartridge model + part/colour combination.
+  // The grouping key intentionally matches the old KPI counting logic so the
+  // number of detail rows equals the number shown on the Cartridge Types card.
+  function cartridgePartSummaryRows(){
+    const grouped = new Map();
+
+    const addRecords = (records, inventoryType) => {
+      records.forEach(record => {
+        const rawName = inventoryType === 'Normal'
+          ? tonerName(record)
+          : refillTypeName(record);
+        const name = String(rawName || '').trim();
+        if (!name) return;
+
+        const displayName = canonicalTonerName(name) || name;
+        if (!isRealTonerName(displayName)) return;
+        const colourField = record.colour || record.color || '';
+        const colours = getColors(name, colourField);
+        let assetNo = '';
+        let location = '';
+
+        if (inventoryType === 'Normal') {
+          const linkedAsset = assets.find(a => num(a.id) === num(record.asset_id));
+          assetNo = String(
+            record.asset_no || record.asset_number ||
+            linkedAsset?.asset_no || linkedAsset?.asset_number || linkedAsset?.asset_name || ''
+          ).trim();
+          location = String(record.location || linkedAsset?.location || '').trim();
+        } else {
+          assetNo = refillAssetNo(record);
+          location = recLocation(record);
+        }
+
+        const quantity = stockOf(record);
+        colours.forEach(colour => {
+          // Use the same key logic as the KPI: model + normalized part/colour.
+          const key = tonerKey(name) + '|' + norm(colour);
+          if (!grouped.has(key)) {
+            grouped.set(key, {
+              key,
+              name: displayName,
+              colour: String(colour),
+              normalRecords: 0,
+              refillRecords: 0,
+              totalRecords: 0,
+              normalStock: 0,
+              refillStock: 0,
+              totalStock: 0,
+              assetNos: new Set(),
+              locations: new Set()
+            });
+          }
+
+          const summary = grouped.get(key);
+          summary.totalRecords += 1;
+          summary.totalStock += quantity;
+          if (inventoryType === 'Normal') {
+            summary.normalRecords += 1;
+            summary.normalStock += quantity;
+          } else {
+            summary.refillRecords += 1;
+            summary.refillStock += quantity;
+          }
+          if (assetNo) summary.assetNos.add(assetNo);
+          if (location) summary.locations.add(location);
+        });
+      });
+    };
+
+    addRecords(toners, 'Normal');
+    addRecords(refills, 'Refill');
+
+    return [...grouped.values()].sort((a, b) =>
+      a.name.localeCompare(b.name) || a.colour.localeCompare(b.colour)
+    );
+  }
+  function assetCountsByDescription(){
+  const m=new Map();
+  uniqueAssetRows(assets).forEach(a=>{const d=getAssetDescription(a);if(d){const k=norm(d);if(!m.has(k))m.set(k,{name:d,count:0,rows:[]});const v=m.get(k);v.count++;v.rows.push(a)}});
+  return [...m.values()].sort((a,b)=>a.name.localeCompare(b.name));
+  }
+  function normalRecordNameSet(){return new Set([...normalTypes().keys()])}
+  function distinctTypeKeys(rows, nameReader){
+    const set=new Set();
+    rows.forEach(r=>{const n=canonicalTonerName(nameReader(r));if(!n||!isRealTonerName(n))return;const k=tonerTypeKey(n);if(k)set.add(k);});
+    return [...set];
+  }
+  function stats(){
+  const uniqueAssets=uniqueAssetRows(assets),normal=normalTypes(),refill=refillRecordNameSet(),allTypes=inventoryTypes(),common=[...normal.keys()].filter(k=>refill.has(k));
+  const assignedUsers=new Set(uniqueAssets.map(a=>norm(a.user)).filter(Boolean));
+  const assignedLocations=new Set(uniqueAssets.map(a=>norm(a.location)).filter(Boolean));
+  // Total Toners / Cartridges counts NORMAL inventory records only.
+  // Refill inventory is shown separately and must not inflate this KPI.
+  return {all:uniqueAssets.length,printers:uniqueAssets.filter(a=>!isScanner(a)).length,scanners:uniqueAssets.filter(isScanner).length,descriptions:assetCountsByDescription().length,tonerTypes:allTypes.size,cartridgeTypes:cartridgePartSummaryRows().length,totalToners:normalInventoryRows().length,refillNew:common.length,newOnly:[...normal.keys()].filter(k=>!refill.has(k)).length,users:assignedUsers.size,locations:assignedLocations.size};
+  }
+  function status(q,min){q=num(q);min=Math.max(1,num(min,5));if(q<=0)return ["Out of stock","er"];if(q<min)return ["Low stock","wa"];return ["Available","ok"]}
+
+  async function fetchData(url,options={}){
+  const res=await fetch(url,{cache:"no-store",credentials:"same-origin",...options});
+  let data={};try{data=await res.json()}catch(e){}
+  if(!res.ok||data.success===false)throw new Error(data.error||data.message||("Request failed: "+url));
+  return data;
+  }
+
+  async function loadAll(showErrors=true){
+  if(busy)return;
+  busy=true;$('liveStatus').textContent="Updating…";
+  try{
+    const [assetData,tonerData,refillData,userData,locationData,txData]=await Promise.all([
+    fetchData('/api/assets'),fetchData('/api/toners'),fetchData('/api/refill-toners'),fetchData('/api/master/users'),fetchData('/api/master/locations'),fetchData('/api/toner-transactions')
+    ]);
+    assets=Array.isArray(assetData.assets)?assetData.assets:(Array.isArray(assetData)?assetData:[]);
+    toners=Array.isArray(tonerData.toners)?tonerData.toners:[];
+    refills=Array.isArray(refillData.refill_toners)?refillData.refill_toners:[];
+    users=Array.isArray(userData.users)?userData.users:[];
+    locations=Array.isArray(locationData.locations)?locationData.locations:[];
+    transactions=Array.isArray(txData.transactions)?txData.transactions:[];
+    renderAll();lastUpdated=new Date();$('liveStatus').textContent='Updated '+lastUpdated.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  }catch(error){console.error('REALTIME LOAD ERROR',error);$('liveStatus').textContent='Connection error';if(showErrors)alert('Unable to load live database data: '+error.message)}
+  finally{busy=false}
+  }
+  function setMessage(id,msg,type='success'){const el=$(id);if(!el)return;el.className='message show '+type;el.textContent=msg}
+  function clearMessage(id){const el=$(id);if(el){el.className='message';el.textContent=''}}
+  function renderAll(){
+    renderTonerStockKpis();
+    renderKpis();
+    if(selectedStockKpi)renderTonerStockDetails();else renderDetail();
+    renderLowStock();renderStockSnapshot();renderRecentTransactions();renderOperationOptions();renderAssetTable();renderRefillTable();renderTransactionTable();renderInventoryTable();populateDataLists()
+  }
+  function renderKpis(){const s=stats();$('kpiGrid').innerHTML=KPI.map(([label,key])=>`<button class="metric ${!selectedStockKpi&&selectedKpi===key?'active':''}" onclick="selectKpi('${key}')"><div class="num">${num(s[key])}</div><div class="label">${esc(label)}</div></button>`).join('')}
+  function selectKpi(key){if(selectedKpi!==key)detailSearch='';selectedStockKpi=null;selectedKpi=key;renderKpis();renderTonerStockKpis();renderDetail()}
+  function table(headers,rows,empty='No database records found.'){if(!rows.length)return `<div class="empty">${esc(empty)}</div>`;return `<table><thead><tr>${headers.map(h=>`<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${rows.map(row=>`<tr>${row.map(v=>`<td>${v===null||v===undefined?'':v}</td>`).join('')}</tr>`).join('')}</tbody></table>`}
+
+  // ADDED: All calculations below use the normal/refill rows already loaded from the API.
+  // No demonstration numbers are hardcoded, and the original dashboard counting is untouched.
+  function stockCardLastActivity(row){
+    const sourceRows=row.kind==='Normal'?toners:refills;
+    const source=sourceRows.find(x=>num(x.id)===num(row.id))||{};
+    const dates=[];
+    const parseDate=value=>{
+      if(!value)return null;
+      const raw=String(value).trim();
+      if(!raw)return null;
+      const parsed=new Date(raw.includes('T')?raw:raw.replace(' ','T'));
+      return Number.isNaN(parsed.getTime())?null:parsed;
+    };
+    // Use transaction history for the matching model/asset when available.
+    transactions.forEach(tx=>{
+      const txAsset=String(tx.asset_number||tx.asset_no||'').trim();
+      if(row.assetNo&&txAsset&&norm(txAsset)!==norm(row.assetNo))return;
+      const txName=String(tx.toner_model||tx.toner_cartridge||'').trim();
+      if(txName){
+        const txKey=tonerKey(canonicalTonerName(txName));
+        const rowKey=tonerKey(row.name);
+        if(txKey&&rowKey&&txKey!==rowKey&&!txKey.includes(rowKey)&&!rowKey.includes(txKey))return;
+      }
+      const date=parseDate(String(tx.transaction_date||'')+' '+String(tx.transaction_time||''));
+      if(date)dates.push(date);
+    });
+    if(dates.length)return new Date(Math.max(...dates.map(d=>d.getTime())));
+    // If no matching transaction is stored, fall back to the inventory record's dates.
+    return parseDate(source.last_activity||source.last_transaction_at||source.updated_at||source.created_at||source.date_added||'');
+  }
+
+  function tonerStockCardData(){
+    const normal=normalInventoryRows().map(row=>({...row,kind:'Normal'}));
+    const refilled=refillInventoryRows().map(row=>({...row,kind:'Refill'}));
+    const all=[...normal,...refilled];
+    const stockTotal=rows=>rows.reduce((sum,row)=>sum+Math.max(0,num(row.stock)),0);
+    const minStock=row=>Math.max(1,num(row.minimum,5));
+    const understock=all.filter(row=>row.stock>0&&row.stock<minStock(row));
+    // Use 3x minimum as the high-stock threshold, consistent with the existing stock bar scale.
+    const overstock=all.filter(row=>row.stock>minStock(row)*3);
+    const healthy=all.filter(row=>row.stock>=minStock(row)&&row.stock<=minStock(row)*3);
+    const deadStock=all.filter(row=>{
+      if(row.stock<=0)return false;
+      const last=stockCardLastActivity(row);
+      return !!last&&last.getTime()<=Date.now()-(30*24*60*60*1000);
+    });
+    const empty=refilled.filter(row=>row.stock<=0);
+    const outOfStock=normal.filter(row=>row.stock<=0);
+    return {
+      values:{
+        availableUnits:stockTotal(all),
+        newUnits:stockTotal(normal),
+        refilledUnits:stockTotal(refilled),
+        empty:empty.length,
+        outOfStock:outOfStock.length,
+        understock:understock.length,
+        overstock:overstock.length,
+        deadStock:deadStock.length,
+        healthy:healthy.length
+      },
+      rows:{availableUnits:all,newUnits:normal,refilledUnits:refilled,empty,outOfStock,understock,overstock,deadStock,healthy}
+    };
+  }
+
+  function renderTonerStockKpis(){
+    const data=tonerStockCardData();
+    $('tonerStockKpiGrid').innerHTML=TONER_STOCK_KPI.map(([label,key])=>
+      `<button type="button" class="metric ${selectedStockKpi===key?'active':''}" onclick="selectTonerStockKpi('${key}')" aria-pressed="${selectedStockKpi===key?'true':'false'}"><div class="num">${num(data.values[key])}</div><div class="label">${esc(label)}</div></button>`
+    ).join('');
+  }
+
+  function selectTonerStockKpi(key){
+    // Show stock-card data in the existing Dashboard details panel only.
+    selectedStockKpi=key;
+    detailSearch='';
+    renderKpis();
+    renderTonerStockKpis();
+    renderTonerStockDetails();
+  }
+
+  function closeTonerStockDetails(){
+    selectedStockKpi=null;
+    detailSearch='';
+    renderKpis();
+    renderTonerStockKpis();
+    renderDetail();
+  }
+
+  function renderTonerStockDetails(){
+    if(!selectedStockKpi)return;
+    const data=tonerStockCardData();
+    const entry=TONER_STOCK_KPI.find(([label,key])=>key===selectedStockKpi);
+    if(!entry)return;
+    const [label,key]=entry;
+    const rows=data.rows[key]||[];
+    const unitCards=['availableUnits','newUnits','refilledUnits'].includes(key);
+    const tableRows=rows.map(row=>{
+      const last=stockCardLastActivity(row);
+      let state='Healthy';
+      if(row.stock<=0)state=row.kind==='Refill'?'Empty':'Out of Stock';
+      else if(row.stock<Math.max(1,num(row.minimum,5)))state='Low / Understock';
+      else if(row.stock>Math.max(1,num(row.minimum,5))*3)state='Overstock';
+      else if(last&&last.getTime()<=Date.now()-(30*24*60*60*1000))state='Dead Stock (30d+)';
+      return [esc(row.kind),esc(row.id),esc(row.name),esc(row.assetNo||'—'),esc(row.location||'—'),esc(row.colour||'Not Specified'),num(row.stock),num(row.minimum),esc(last?last.toLocaleDateString():'Not recorded'),esc(state)];
+    });
+    $('detailPanel').innerHTML=`
+      <div class="card-head">
+        <h3>${esc(label)} Details · ${rows.length} records</h3>
+        <button class="btn secondary" type="button" onclick="closeTonerStockDetails()">Back to Dashboard details</button>
+      </div>
+      <div class="muted small" style="margin-bottom:10px">Card value: ${num(data.values[key])}${unitCards?' units':' records'} · ${rows.length} matching inventory records. Calculated from the current database data.</div>
+      <div class="table-scroll">${table(
+        ['Inventory Type','Record ID','Toner / Cartridge','Asset No','Location','Colour','Stock Units','Minimum Stock','Last Activity','Status'],
+        tableRows,
+        'No inventory records match this card in the current database.'
+      )}</div>`;
+  }
+
+  function assetTableRows(rows,withActions=false){
+  return rows.map(a=>[esc(getAssetNo(a)),esc(getAssetDeviceType(a)),esc(getAssetDescription(a)),esc(a.user||''),esc(a.location||''),esc(a.toner_cartridge||''),esc(a.colour||'Not Specified'),num(a.stock),withActions?`<button class="btn" onclick="editAsset(${num(a.id)})">Edit</button> <button class="btn danger" onclick="deleteAsset(${num(a.id)})">Remove</button>`:'']);
+  }
+  function normalInventoryRows(){return toners.map(t=>({kind:'Normal',id:t.id,name:canonicalTonerName(tonerName(t)),assetNo:t.asset_no||t.asset_number||assets.find(a=>num(a.id)===num(t.asset_id))?.asset_no||'',location:assets.find(a=>num(a.id)===num(t.asset_id))?.location||'',stock:stockOf(t),minimum:num(t.minimum_stock,5),colour:t.colour||''})).filter(r=>r.name&&isRealTonerName(r.name))}
+  function refillInventoryRows(){return refills.map(r=>({kind:'Refill',id:r.id,name:canonicalTonerName(refillTypeName(r)),assetNo:refillAssetNo(r),location:recLocation(r),stock:stockOf(r),minimum:num(r.minimum_stock,5),colour:r.colour||''})).filter(r=>r.name&&isRealTonerName(r.name))}
+  function combinedInventoryRows(){
+    return [...normalInventoryRows(),...refillInventoryRows()].sort((a,b)=>{
+      const nameCompare=(a.name||'').localeCompare(b.name||'');
+      if(nameCompare!==0)return nameCompare;
+      const typeCompare=(a.kind||'').localeCompare(b.kind||'');
+      if(typeCompare!==0)return typeCompare;
+      return String(a.assetNo||'').localeCompare(String(b.assetNo||''));
+    });
+  }
+
+  function applyDetailSearch(rows){
+    const query=detailSearch.trim().toLowerCase();
+    if(!query)return rows;
+    return rows.filter(row=>String(row.map(v=>v==null||v==undefined?'':v).join(' ')).toLowerCase().includes(query));
+  }
+  function tonerNameListForKey(key){
+    const names=new Set();
+    const matchSet=key==='newOnly'?new Set([...normalTypes().keys()].filter(k=>!refillRecordNameSet().has(k))):new Set([...normalTypes().keys()].filter(k=>refillRecordNameSet().has(k)));
+    const displayName=new Map();
+    toners.forEach(t=>{const n=canonicalTonerName(tonerName(t));if(n){displayName.set(tonerTypeKey(n),n)}});
+    matchSet.forEach(k=>{const name=displayName.get(k)||k; if(name) names.add(String(name).trim());});
+    return [...names].sort((a,b)=>a.localeCompare(b));
+  }
+  function renderDetail(){
+  // Keep the dashboard search focused while its result table is refreshed.
+  // Without this, rebuilding detailPanel on every keystroke removes the input
+  // element and forces the user to click the search box again.
+  const activeElement = document.activeElement;
+  const searchHadFocus = activeElement && activeElement.id === 'detailSearchInput';
+  const searchSelectionStart = searchHadFocus ? activeElement.selectionStart : null;
+  const searchSelectionEnd = searchHadFocus ? activeElement.selectionEnd : null;
+
+  const titleByKey=Object.fromEntries(KPI.map(([label,key])=>[key,label]));
+  let headers=[],rows=[],title=titleByKey[selectedKpi]||'All assets';
+  const uniqueAssets=uniqueAssetRows(assets);
+  if(selectedKpi==='all'||selectedKpi==='printers'||selectedKpi==='scanners'){
+    const subset=selectedKpi==='printers'?uniqueAssets.filter(a=>!isScanner(a)):selectedKpi==='scanners'?uniqueAssets.filter(isScanner):uniqueAssetDisplayRows(assets);
+    headers=['Asset No','Type','Asset Description','User','Location','Toner / Cartridge Type','Colour','Stock'];
+    rows=assetTableRows(subset).map(r=>r.slice(0,8));
+  }else if(selectedKpi==='descriptions'){
+    headers=['Asset Description','Assets','Toner Names'];
+    rows=assetCountsByDescription().map(x=>[esc(x.name),x.count,esc([...new Set(x.rows.map(a=>String(a.toner_cartridge||a.toner_model||'').trim()).filter(Boolean))].join(', '))]);
+  }else if(selectedKpi==='tonerTypes'){
+    headers=['Toner Type / Model','Normal Records','Refill Records','Total Records','Total Quantity','Colors'];
+    const m=new Map();
+    const addRow=(rows, nameReader, colourReader, bucketKey)=>{rows.forEach(r=>{const n=canonicalTonerName(nameReader(r));if(!n||!isRealTonerName(n))return;const k=tonerKey(n);if(!m.has(k))m.set(k,{name:n,normal:0,refill:0,qty:0,colors:new Set()});const v=m.get(k);v[bucketKey]++;v.qty+=stockOf(r);getColors(n,colourReader(r)).forEach(c=>v.colors.add(c));});};
+    addRow(toners, tonerName, t=>t.colour||'', 'normal');
+    addRow(refills, refillTypeName, r=>r.colour||'', 'refill');
+    rows=[...m.values()].sort((a,b)=>a.name.localeCompare(b.name)).map(x=>[esc(x.name),x.normal,x.refill,(x.normal+x.refill),x.qty,esc([...x.colors].join(', '))]);
+  }else if(selectedKpi==='cartridgeTypes'){
+    headers=['Toner / Cartridge','Part / Colour','Normal Records','Refill Records','Total Records','Available Stock','Asset No(s)','Location(s)'];
+    rows=cartridgePartSummaryRows().map(item=>[
+      esc(item.name),
+      esc(item.colour),
+      item.normalRecords,
+      item.refillRecords,
+      item.totalRecords,
+      item.totalStock,
+      esc([...item.assetNos].sort((a,b)=>a.localeCompare(b, undefined, {numeric:true})).join(', ') || '—'),
+      esc([...item.locations].sort((a,b)=>a.localeCompare(b)).join(', ') || '—')
+    ]);
+  }else if(selectedKpi==='totalToners'){
+    headers=['Inventory Type','Record ID','Toner / Cartridge','Asset No','Location','Colour','Stock','Minimum Stock'];
+    // Keep the detail table aligned with the KPI: NORMAL records only.
+    rows=normalInventoryRows().map(r=>[esc(r.kind),r.id,esc(r.name),esc(r.assetNo),esc(r.location),esc(r.colour||'Not Specified'),r.stock,r.minimum]);
+  }else if(selectedKpi==='refillNew'||selectedKpi==='newOnly'){
+    const nset=normalRecordNameSet(),rset=refillRecordNameSet();let names=selectedKpi==='refillNew'?[...nset].filter(x=>rset.has(x)):[...nset].filter(x=>!rset.has(x));
+    const displayName=new Map();toners.forEach(t=>{const n=canonicalTonerName(tonerName(t));if(n){displayName.set(tonerTypeKey(n),n)}});
+    headers=['Toner / Cartridge Type','Normal Records','Normal Stock','Refill Records','Refill Stock'];
+    rows=names.sort().map(k=>{const ns=toners.filter(t=>{const n=canonicalTonerName(tonerName(t));return n&&tonerTypeKey(n)===k}),rs=refills.filter(r=>{const n=canonicalTonerName(refillTypeName(r));return n&&tonerTypeKey(n)===k});return [esc(formatNormalOnlyText(displayName.get(k)||k)),ns.length,ns.reduce((s,t)=>s+stockOf(t),0),rs.length,rs.reduce((s,r)=>s+stockOf(r),0)]});
+  }else if(selectedKpi==='users'){
+    const groups=new Map();uniqueAssets.forEach(a=>{const name=String(a.user||'').trim();if(!name)return;const key=norm(name);if(!groups.has(key))groups.set(key,{name,rows:[]});groups.get(key).rows.push(a)});
+    headers=['User','Asset Count','Asset Descriptions','Toners / Cartridges','Locations'];
+    rows=[...groups.values()].sort((a,b)=>a.name.localeCompare(b.name)).map(g=>[esc(g.name),g.rows.length,esc([...new Set(g.rows.map(getAssetDescription).filter(Boolean))].join(', ')),esc([...new Set(g.rows.map(a=>a.toner_cartridge||'').filter(Boolean))].join(', ')),esc([...new Set(g.rows.map(a=>a.location||'').filter(Boolean))].join(', '))]);
+  }else if(selectedKpi==='locations'){
+    const groups=new Map();uniqueAssets.forEach(a=>{const name=String(a.location||'').trim();if(!name)return;const key=norm(name);if(!groups.has(key))groups.set(key,{name,rows:[]});groups.get(key).rows.push(a)});
+    headers=['Location','Asset Count','Asset Descriptions','Toners / Cartridges','Users','Normal Stock'];
+    rows=[...groups.values()].sort((a,b)=>a.name.localeCompare(b.name)).map(g=>[esc(g.name),g.rows.length,esc([...new Set(g.rows.map(getAssetDescription).filter(Boolean))].join(', ')),esc([...new Set(g.rows.map(a=>a.toner_cartridge||'').filter(Boolean))].join(', ')),esc([...new Set(g.rows.map(a=>a.user||'').filter(Boolean))].join(', ')),g.rows.reduce((s,a)=>s+stockOf(a),0)]);
+  }
+  rows=applyDetailSearch(rows);
+  $('detailPanel').innerHTML=`<div class="card-head"><h3>${esc(title)} · ${rows.length} ${selectedKpi==='all'?'records':'rows'}</h3><span class="muted small">${selectedKpi==='all'?'One row per unique Asset No. Toner/part types and colours are combined; saved database records are not deleted.':selectedKpi==='cartridgeTypes'?'Grouped by unique cartridge type and part/colour; record counts and asset/location lists are combined.':'Calculated from current database records'}</span></div><div class="inline" style="margin-bottom:10px;"><input class="search" id="detailSearchInput" value="${esc(detailSearch)}" placeholder="Search this card..." oninput="detailSearch=this.value;renderDetail();"><button class="btn secondary" type="button" onclick="detailSearch='';renderDetail();">Clear</button></div><div class="table-scroll">${table(headers,rows)}</div>`;
+
+  // Restore focus and caret after replacing the card's HTML. This lets users
+  // type a full search normally without re-clicking after each character.
+  if (searchHadFocus) {
+    const nextSearch = $('detailSearchInput');
+    if (nextSearch) {
+      nextSearch.focus({ preventScroll: true });
+      if (typeof searchSelectionStart === 'number' && typeof searchSelectionEnd === 'number') {
+        try { nextSearch.setSelectionRange(searchSelectionStart, searchSelectionEnd); } catch (_) {}
+      }
+    }
+  }
+  }
+  function renderLowStock(){const low=combinedInventoryRows().filter(r=>(r.stock>0&&r.stock<r.minimum)||r.stock<=0);$('lowStockCount').textContent=low.length+' records';$('lowStockTags').innerHTML=low.length?low.slice(0,50).map(r=>`<span class="tag ${r.stock<=0?'er':'wa'}">${esc(r.name)} · ${r.stock} left (${esc(r.kind)})</span>`).join(''):`<span class="muted small">No low stock records.</span>`}
+  function renderStockSnapshot(){const rows=combinedInventoryRows().map(r=>{const [label,cls]=status(r.stock,r.minimum);const pct=Math.max(0,Math.min(100,r.minimum?r.stock/(r.minimum*3)*100:0));return [esc(r.name),`<span class="tag ${r.kind==='Refill'?'wa':'in'}">${r.kind}</span>`,esc(r.assetNo),esc(r.location),`<div class="stockline"><b>${r.stock}</b><div class="stockbar"><i style="width:${pct}%"></i></div></div>`,`<span class="tag ${cls}">${label}</span>`]});$('stockSnapshot').innerHTML=table(['Toner / Cartridge','Type','Asset No','Location','Stock','Status'],rows)}
+  function txRows(){return transactions.map(t=>[esc((t.transaction_date||'')+' '+(t.transaction_time||'')),`<span class="tag ${String(t.transaction_type).toUpperCase()==='ISSUE'?'wa':String(t.transaction_type).toUpperCase()==='RETURN'?'in':String(t.transaction_type).toUpperCase()==='REFILL'?'ok':'gray'}">${esc(t.transaction_type||'')}</span>`,esc(t.asset_number||t.asset_no||''),esc(t.toner_model||''),esc(t.user_name||''),esc(t.location_name||''),num(t.quantity),esc(t.remarks||'')])}
+  function renderRecentTransactions(){const rows=txRows().slice(0,15).map(r=>r.slice(0,7));$('recentTransactions').innerHTML=table(['Date / Time','Action','Asset No','Toner','User','Location','Qty'],rows,'No transactions have been recorded.');$('opsRecent').innerHTML=table(['Date / Time','Action','Asset No','Toner','User','Location','Qty'],rows,'No transactions have been recorded.')}
+  function renderTransactionTable(){const term=norm($('transactionSearch')?.value||'');const rows=txRows().filter(r=>!term||norm(r.join(' ')).includes(term));$('transactionsTable').innerHTML=table(['Date / Time','Action','Asset No','Toner','User','Location','Qty','Remarks'],rows,'No transactions have been recorded.')}
+  function renderInventoryTable(){const term=norm($('inventorySearch')?.value||'');const rows=combinedInventoryRows().filter(r=>!term||norm([r.kind,r.name,r.assetNo,r.location,r.colour].join(' ')).includes(term)).map(r=>[esc(r.kind),r.id,esc(r.name),esc(r.assetNo),esc(r.location),esc(r.colour||'Not Specified'),r.stock,r.minimum,`<span class="tag ${status(r.stock,r.minimum)[1]}">${status(r.stock,r.minimum)[0]}</span>`]);$('inventoryTable').innerHTML=table(['Type','ID','Toner / Cartridge','Asset No','Location','Colour','Stock','Minimum','Status'],rows,'No inventory records have been saved.')}
+
+  function editAsset(id){
+  const a=assets.find(x=>num(x.id)===num(id));
+  if(!a){alert("Asset record not found.");return}
+  editingAssetId=num(a.id);
+  $("assetNo").value=getAssetNo(a);
+  $("assetDeviceType").value=getAssetDeviceType(a);
+  $("assetDescription").value=getAssetDescription(a);
+  $("assetUser").value=a.user||"";
+  $("assetLocation").value=a.location||"";
+  $("assetModel").value=a.toner_model||a.toner_cartridge||"";
+  $("assetToner").value=a.toner_cartridge||"";
+  $("assetColour").value=a.colour||"";
+  $("assetStock").value=num(a.stock);
+  $("assetMinimum").value=num(a.minimum_stock,5);
+  $("assetSubmitButton").textContent="Update Asset";
+  $("cancelAssetEditButton").hidden=false;
+  clearMessage("assetMessage");
+  switchSubView("normalAsset");
+  $("assetNo").focus();
+  }
+
+  function cancelAssetEdit(){
+  editingAssetId=null;
+  $("normalAssetForm").reset();
+  $("assetSubmitButton").textContent="Save Asset & Toner";
+  $("cancelAssetEditButton").hidden=true;
+  clearMessage("assetMessage");
+  }
+
+  function renderAssetTable(){
+  const term=norm($("assetSearch")?.value||"");
+  const rows=assets.filter(a=>!term||norm([getAssetNo(a),getAssetDeviceType(a),getAssetDescription(a),a.toner_model,a.user,a.location,a.toner_cartridge,a.colour].join(" ")).includes(term))
+  .map(a=>[
+    esc(getAssetNo(a)),
+    esc(getAssetDeviceType(a)),
+    esc(getAssetDescription(a)),
+    esc(a.toner_model||""),
+    esc(a.toner_cartridge||""),
+    esc(a.user||""),
+    esc(a.location||""),
+    esc(a.colour||"Not Specified"),
+    num(a.stock),
+    `<button class="btn" onclick="editAsset(${num(a.id)})">Edit</button>
+    <button class="btn danger" onclick="deleteAsset(${num(a.id)})">Remove</button>`
+  ]);
+  $("assetTable").innerHTML=table(["Asset No","Device Type","Asset Description","Toner / Cartridge Model","Part Type","User","Location","Colour","Stock","Actions"],rows,"No assets have been added yet.");
+  }
+
+  function renderRefillTable(){const term=norm($('refillSearch')?.value||'');const rows=refills.filter(r=>!term||norm([refillName(r),refillTypeName(r),refillAssetNo(r),r.user||r.assigned_user,r.toner_cartridge,r.colour,recLocation(r)].join(' ')).includes(term)).map(r=>[num(r.id),esc(r.refill_name||''),esc(refillAssetNo(r)),esc(r.user||r.assigned_user||''),esc(refillTypeName(r)||'Type not specified'),esc(r.colour||'Not Specified'),esc(recLocation(r)),stockOf(r),num(r.minimum_stock,5),`<button class="btn" onclick="editRefill(${num(r.id)})">Edit</button> <button class="btn danger" onclick="deleteRefill(${num(r.id)})">Remove</button>`]);$('refillTable').innerHTML=table(['ID','Refill Name','Asset No','Assigned User','Toner / Cartridge Type','Colour','Location','Stock','Minimum','Actions'],rows,'No refill records have been saved yet.')}
+
+  function populateDataLists(){
+    if($('assetUserList'))$('assetUserList').innerHTML=users.map(u=>`<option value="${esc(u.full_name||u.name)}"></option>`).join('');
+    if($('assetLocationList'))$('assetLocationList').innerHTML=locations.map(l=>`<option value="${esc(l.location_name||l.name)}"></option>`).join('');
+    // Persisted records are the source of autocomplete options. Once a model
+    // is saved, loadAll() refreshes these options for the next entry.
+    const modelNames=[...new Set([
+      // Current toner table records.
+      ...toners.map(t=>tonerName(t)),
+      // Asset API also exposes the model linked to each saved asset. Include
+      // it so legacy/existing asset records remain available as suggestions.
+      ...assets.map(a=>a.toner_model),
+      // Older asset records may have stored the model in toner_cartridge.
+      // Generic values such as "Toner" and "Cartridge" are filtered below.
+      ...assets.map(a=>a.toner_cartridge),
+      // Saved refill descriptions can also identify a reusable model.
+      ...refills.map(r=>refillTypeName(r))
+    ].map(v=>canonicalTonerName(v)).filter(v=>v&&isRealTonerName(v)))].sort((a,b)=>a.localeCompare(b));
+    if($('assetModelList'))$('assetModelList').innerHTML=modelNames.map(n=>`<option value="${esc(n)}"></option>`).join('');
+    const partTypes=[...new Set(['Toner','Cartridge','Drum','Ribbon','Normal',...assets.map(a=>a.toner_cartridge),...refills.map(r=>r.toner_cartridge)].map(v=>String(v||'').trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+    const partOptions=partTypes.map(n=>`<option value="${esc(n)}"></option>`).join('');
+    if($('normalPartTypeList'))$('normalPartTypeList').innerHTML=partOptions;
+    if($('refillPartTypeList'))$('refillPartTypeList').innerHTML=partOptions;
+    const refillNames=[...new Set(refills.map(r=>refillName(r)).map(v=>String(v||'').trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+    if($('refillDescriptionList'))$('refillDescriptionList').innerHTML=refillNames.map(n=>`<option value="${esc(n)}"></option>`).join('');
+  }
+  function operationColour(record){return String(record?.colour??record?.color??'').trim()||'Not Specified'}
+
+  // Resolve the current asset row for a normal toner record. Prefer its exact
+  // asset_id when it belongs to the selected user; when that link is missing,
+  // stale, or has no location, fall back to the selected user's matching Asset No.
+  // Toner type and colour help disambiguate repeated Asset No rows.
+  function operationAssetForToner(toner, userName=''){
+    const selectedUser=norm(userName||'');
+    const linkedUserOf=a=>norm(a?.user||a?.assigned_user||'');
+    const exact=assets.find(a=>num(a.id)===num(toner?.asset_id));
+    const tonerNo=norm(toner?.asset_no||toner?.asset_number||getAssetNo(exact));
+    if(exact && (!selectedUser || linkedUserOf(exact)===selectedUser) && String(exact.location||'').trim())return exact;
+    const candidates=assets.filter(a=>{
+      if(!tonerNo || norm(getAssetNo(a))!==tonerNo)return false;
+      if(selectedUser && linkedUserOf(a)!==selectedUser)return false;
+      return true;
+    });
+    if(!candidates.length)return exact && (!selectedUser || linkedUserOf(exact)===selectedUser) ? exact : null;
+    const tonerType=norm(canonicalTonerName(tonerName(toner)));
+    const tonerColour=norm(operationColour(toner));
+    candidates.sort((a,b)=>{
+      const score=a=>{
+        let n=0;
+        if(num(a.id)===num(toner?.asset_id))n+=String(a.location||'').trim()?1000:0;
+        if(num(a.toner_id)===num(toner?.id))n+=500;
+        const assetType=norm(canonicalTonerName(a.toner_cartridge||a.toner_model||''));
+        if(tonerType && assetType===tonerType)n+=100;
+        else if(tonerType && assetType && (assetType.includes(tonerType)||tonerType.includes(assetType)))n+=30;
+        const assetColour=norm(a.colour||a.color||'');
+        if(tonerColour && assetColour===tonerColour)n+=60;
+        if(String(a.location||'').trim())n+=10;
+        return n;
+      };
+      return score(b)-score(a);
+    });
+    return candidates[0]||null;
+  }
+
+  // Refill inventory also has a stored location, but a matching asset assigned
+  // to this user is the source of truth for the user's current location.
+  function operationAssetForRefill(refill, userName=''){
+    const selectedUser=norm(userName||refill?.user||refill?.assigned_user||'');
+    const refillNo=norm(refillAssetNo(refill));
+    if(!refillNo)return null;
+    const candidates=assets.filter(a=>norm(getAssetNo(a))===refillNo && (!selectedUser||norm(a.user||a.assigned_user||'')===selectedUser));
+    if(!candidates.length)return null;
+    const refillType=norm(canonicalTonerName(refillTypeName(refill)||refillName(refill)));
+    const refillColour=norm(operationColour(refill));
+    candidates.sort((a,b)=>{
+      const score=a=>{
+        let n=String(a.location||'').trim()?10:0;
+        const at=norm(canonicalTonerName(a.toner_cartridge||a.toner_model||''));
+        if(refillType&&at===refillType)n+=100;
+        else if(refillType&&at&&(at.includes(refillType)||refillType.includes(at)))n+=30;
+        if(refillColour&&norm(a.colour||a.color||'')===refillColour)n+=60;
+        return n;
+      };
+      return score(b)-score(a);
+    });
+    return candidates[0]||null;
+  }
+  function operationRecordLocation(type, record, userName=''){
+    if(!record)return '';
+    if(type==='refill'){
+      const asset=operationAssetForRefill(record,userName);
+      return String(asset?.location||recLocation(record)||'').trim();
+    }
+    const asset=operationAssetForToner(record,userName);
+    return String(asset?.location||record.location||record.location_name||'').trim();
+  }
+
+  async function deleteSelectedUser(inputId){
+    const input=$(inputId);if(!input)return;
+    const value=input.value.trim();
+    if(!value){return;}
+    const user=users.find(u=>norm(u.full_name||u.name)===norm(value));
+    if(!user){setMessage('assetMessage','User not found in the active list.','error');return;}
+    if(!confirm(`Delete user "${user.full_name||user.name}" from the registered list?`))return;
+    try{
+      const result=await fetchData('/api/master/users/delete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id:num(user.id)})});
+      users=users.filter(u=>num(u.id)!==num(user.id));
+      input.value='';
+      populateDataLists();
+      renderOperationOptions();
+      setMessage('assetMessage',result.message||'User deleted successfully.','success');
+      setMessage('refillAddMessage',result.message||'User deleted successfully.','success');
+    }catch(err){setMessage('assetMessage',err.message,'error');setMessage('refillAddMessage',err.message,'error');}
+  }
+
+  async function deleteUserById(userId){
+    const user=users.find(u=>num(u.id)===num(userId));
+    if(!user){return;}
+    if(!confirm(`Delete user "${user.full_name||user.name}" from the registered list?`))return;
+    try{
+      const result=await fetchData('/api/master/users/delete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id:num(userId)})});
+      users=users.filter(u=>num(u.id)!==num(userId));
+      if($('opUser'))$('opUser').value='';
+      await loadAll(false);
+      setMessage('opMessage',result.message||'User deleted successfully.','success');
+    }catch(err){setMessage('opMessage',err.message,'error');}
+  }
+
+  function operationRecordOptions(type, userName=''){
+    const selectedUser=String(userName||'').trim();
+    if(type==='refill'){
+      const matchingAssets=assets.filter(a=>norm(a.user||a.assigned_user)===norm(selectedUser));
+      const userAssetNos=new Set(matchingAssets.map(a=>norm(getAssetNo(a))).filter(Boolean));
+      return refills.filter(r=>!selectedUser||norm(r.user||r.assigned_user)===norm(selectedUser)||userAssetNos.has(norm(refillAssetNo(r)))).map(r=>({
+        id:num(r.id),
+        colour:operationColour(r),
+        label:`${refillName(r)} · ${refillTypeName(r)||'Type not specified'} · ${refillAssetNo(r)||'No asset'} · ${operationColour(r)} · ${operationRecordLocation('refill',r,selectedUser)||'No location'} · stock ${stockOf(r)} · Record #${num(r.id)}`
+      }));
+    }
+    return toners.filter(t=>{
+      if(!selectedUser)return true;
+      const linkedAsset=assets.find(a=>num(a.id)===num(t.asset_id));
+      const directUser=norm(t.user||t.assigned_user||'');
+      const relatedAsset=operationAssetForToner(t,selectedUser);
+      return directUser===norm(selectedUser)||!!relatedAsset||norm(linkedAsset?.user||linkedAsset?.assigned_user||'')===norm(selectedUser);
+    }).map(t=>{
+      const a=operationAssetForToner(t,selectedUser);
+      const no=t.asset_no||t.asset_number||getAssetNo(a)||'';
+      const location=operationRecordLocation('normal',t,selectedUser);
+      return {id:num(t.id),colour:operationColour(t),label:`${tonerName(t)}${no?' · '+no:''}${location?' · '+location:''} · ${operationColour(t)} · stock ${stockOf(t)} · Record #${num(t.id)}`};
+    });
+  }
+
+  function operationRecordForUser(type, userName){
+    const name=String(userName||'').trim();
+    if(!name)return [];
+    if(type==='refill'){
+      const matchingAssets=assets.filter(a=>norm(a.user||a.assigned_user)===norm(name));
+      const userAssetNos=new Set(matchingAssets.map(a=>norm(getAssetNo(a))).filter(Boolean));
+      return refills.filter(r=>norm(r.user||r.assigned_user)===norm(name)||userAssetNos.has(norm(refillAssetNo(r))));
+    }
+    return toners.filter(t=>{
+      const directUser=norm(t.user||t.assigned_user||'');
+      const relatedAsset=operationAssetForToner(t,name);
+      const linkedAsset=assets.find(a=>num(a.id)===num(t.asset_id));
+      return directUser===norm(name)||!!relatedAsset||norm(linkedAsset?.user||linkedAsset?.assigned_user||'')===norm(name);
+    });
+  }
+
+  function renderOperationOptions(){
+    const type=$('opInventory')?.value||'normal';
+    const recordInput=$('opRecord');
+    if(!recordInput)return;
+    const oldRecord=recordInput.value;
+    const oldUser=$('opUser')?.value||'';
+    const colourSelect=$('opColour');
+    const oldColour=colourSelect?.value||'';
+
+    const availableColours=[...new Map(['Black','Cyan','Magenta','Yellow','Normal','Not Specified',...toners.map(operationColour),...refills.map(operationColour)].map(c=>[norm(c),c])).values()];
+    if(colourSelect){
+      colourSelect.innerHTML='<option value="">All colours</option>'+availableColours.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');
+      if([...colourSelect.options].some(o=>norm(o.value)===norm(oldColour)))colourSelect.value=oldColour;
+    }
+
+    const activeColour=norm(colourSelect?.value||'');
+    const items=operationRecordOptions(type, oldUser).filter(x=>!activeColour||norm(x.colour)===activeColour);
+    const recordDatalist=$('opRecordList');
+    if(recordDatalist)recordDatalist.innerHTML=items.map(x=>`<option value="${esc(x.label)}"></option>`).join('');
+
+    // Keep the selected record by database ID, not by its label/stock text.
+    // Its label changes when stock changes; keeping the ID avoids losing selection.
+    let selected=selectedOperationRecordId===null?null:items.find(x=>num(x.id)===num(selectedOperationRecordId));
+    if(!selected&&oldRecord){
+      selected=items.find(x=>norm(x.label)===norm(oldRecord))||null;
+      if(!selected&&/^\d+$/.test(oldRecord.trim()))selected=items.find(x=>num(x.id)===num(oldRecord.trim()))||null;
+    }
+    if(selected){
+      selectedOperationRecordId=num(selected.id);
+      recordInput.value=selected.label;
+    }else{
+      selectedOperationRecordId=null;
+      recordInput.value='';
+    }
+
+    const userDatalist=$('opUserList');
+    if(userDatalist)userDatalist.innerHTML=users.map(u=>`<option value="${esc(u.full_name||u.name)}"></option>`).join('');
+    const userInput=$('opUser');
+    if(userInput)userInput.value=oldUser;
+    renderOperationSummary();
+    updateOperationButton();
+  }
+
+  function selectedOperationRecord(){
+    const type=$('opInventory')?.value||'normal';
+    const list=type==='refill'?refills:toners;
+    if(selectedOperationRecordId!==null){
+      return list.find(r=>num(r.id)===num(selectedOperationRecordId))||null;
+    }
+    const typed=String($('opRecord')?.value||'').trim();
+    if(!typed)return null;
+    if(/^\d+$/.test(typed))return list.find(r=>num(r.id)===num(typed))||null;
+    const items=operationRecordOptions(type, $('opUser')?.value||'');
+    const exact=items.find(x=>norm(x.label)===norm(typed));
+    if(!exact)return null;
+    selectedOperationRecordId=num(exact.id);
+    return list.find(r=>num(r.id)===num(exact.id))||null;
+  }
+
+  function resolveOperationRecordSelection(){
+    const type=$('opInventory')?.value||'normal';
+    const typed=String($('opRecord')?.value||'').trim();
+    const activeColour=norm($('opColour')?.value||'');
+    const items=operationRecordOptions(type, $('opUser')?.value||'').filter(x=>!activeColour||norm(x.colour)===activeColour);
+    let selected=null;
+    if(/^\d+$/.test(typed))selected=items.find(x=>num(x.id)===num(typed))||null;
+    if(!selected)selected=items.find(x=>norm(x.label)===norm(typed))||null;
+    selectedOperationRecordId=selected?num(selected.id):null;
+    if(selected){
+      $('opRecord').value=selected.label;
+      const chosen=(type==='refill'?refills:toners).find(r=>num(r.id)===num(selected.id));
+      const colour=chosen?operationColour(chosen):'';
+      if(colour && [...$('opColour').options].some(o=>norm(o.value)===norm(colour)))$('opColour').value=colour;
+    }
+    renderOperationSummary();
+  }
+
+  function renderOperationSummary(){const type=$('opInventory')?.value||'normal';const r=selectedOperationRecord();$('opTypeBadge').textContent=type.toUpperCase();if(!r){$('opSummary').innerHTML='Select a record to see its live stock.';return}const userName=String($('opUser')?.value||'').trim();const a=type==='normal'?operationAssetForToner(r,userName):operationAssetForRefill(r,userName);const name=type==='refill'?refillName(r):tonerName(r);const loc=operationRecordLocation(type,r,userName);const no=type==='refill'?(refillAssetNo(r)||getAssetNo(a)):(r.asset_no||r.asset_number||getAssetNo(a));const partType=type==='refill'?(refillTypeName(r)||'Not specified'):tonerName(r);$('opSummary').innerHTML=`<b>${esc(name)}</b><br>Asset No: ${esc(no||'—')}<br>Toner / Cartridge Type: ${esc(partType)}<br>Location: ${esc(loc||'—')}<br>Colour: ${esc(operationColour(r))}<br>Current stock: <b>${stockOf(r)}</b><br>Currently issued: <b>${num(r.issued_quantity)}</b>`}
+  function updateOperationButton(){const btn=$('opSubmit');if(btn)btn.textContent=operation==='REFILL'?'Add Refill Stock':'Submit '+(operation==='ISSUE'?'Issue':'Return')}
+
+  async function performOperation(){
+  clearMessage('opMessage');const type=$('opInventory').value;const record=selectedOperationRecord();const q=Number($('opQuantity').value);
+  const userInput=String($('opUser')?.value||'').trim();
+  const userId = userInput ? users.find(u => norm(u.full_name||u.name) === norm(userInput))?.id : null;
+  if(!record){setMessage('opMessage','Please select a saved inventory record.','error');return}
+  if(!Number.isInteger(q)||q<1){setMessage('opMessage','Enter a valid quantity greater than zero.','error');return}
+  if(operation==='ISSUE'&&!userId){setMessage('opMessage','Select an active registered user before issuing stock.','error');return}
+  if(operation==='REFILL'&&type!=='refill'){setMessage('opMessage','Refill stock is added to a saved refill inventory record. Switch Inventory to Saved refill inventory.','error');return}
+  let url,body;
+  if(operation==='REFILL'){url='/api/toners/refill';body={refill_id:num(record.id),quantity:q,user_id:num(userId,0)||null,remarks:$('opRemarks').value.trim()||'Refill stock added from realtime interface'}}
+  else{url=operation==='ISSUE'?'/api/toners/issue':'/api/toners/return';body=type==='refill'?{inventory_type:'refill',refill_id:num(record.id),quantity:q,user_id:num(userId,0)||null,remarks:$('opRemarks').value.trim()}:{toner_id:num(record.id),quantity:q,user_id:num(userId,0)||null,remarks:$('opRemarks').value.trim()};if(operation==='ISSUE'&&q>stockOf(record)){setMessage('opMessage',`Only ${stockOf(record)} units are currently available.`,'error');return}}
+  const btn=$('opSubmit');btn.disabled=true;
+  try{const result=await fetchData(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});setMessage('opMessage',result.message||'Operation saved successfully.','success');$('opQuantity').value=1;$('opRemarks').value='';await loadAll(false)}
+  catch(error){setMessage('opMessage',error.message,'error')}
+  finally{btn.disabled=false}
+  }
+
+  async function deleteAsset(id){const a=assets.find(x=>num(x.id)===num(id));if(!a)return;if(!confirm(`Remove asset ${getAssetNo(a)}? Related active toner will be soft-deleted. Transaction history is preserved.`))return;try{const r=await fetchData('/api/assets/delete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({asset_id:num(id)})});alert(r.message||'Asset removed.');await loadAll(false)}catch(e){alert('Unable to remove asset: '+e.message)}}
+  function editRefill(id){
+    const r=refills.find(x=>num(x.id)===num(id));
+    if(!r){alert("Refill record not found.");return}
+    editingRefillId=num(r.id);
+    if(!editingRefillId){alert("This refill record has no valid database ID, so it cannot be edited.");return}
+    // Keep the row ID on the form as well as in JavaScript state so the
+    // correct existing database record is always updated.
+    $("refillAssetForm").dataset.editingRefillId=String(editingRefillId);
+    // Legacy refill rows can have a blank user or part type. Don't let browser
+    // required-field validation block an otherwise valid edit of those rows.
+    $("refillUser").required=false;
+    $("refillCartridge").required=false;
+    $("refillDescription").value=r.refill_name||r.refill_type||r.name||"";
+    $("refillAssetNo").value=refillAssetNo(r);
+    $("refillCartridge").value=r.toner_cartridge||"";
+    const linkedAsset=assets.find(a=>norm(getAssetNo(a))===norm(refillAssetNo(r)));
+    $("refillUser").value=r.user||r.assigned_user||linkedAsset?.user||linkedAsset?.assigned_user||"";
+    $("refillColour").value=r.colour||"";
+    $("refillLocation").value=recLocation(r)||"";
+    $("refillStock").value=stockOf(r);
+    $("refillMinimum").value=num(r.minimum_stock,5);
+    $("refillSubmitButton").textContent="Update Refill";
+    $("cancelRefillEditButton").hidden=false;
+    clearMessage("refillAddMessage");
+    clearMessage("refillListMessage");
+    switchSubView("refillAsset");
+    $("refillDescription").focus();
+  }
+
+  function cancelRefillEdit(){
+    editingRefillId=null;
+    delete $("refillAssetForm").dataset.editingRefillId;
+    $("refillAssetForm").reset();
+    $("refillUser").required=true;
+    $("refillCartridge").required=true;
+    $("refillSubmitButton").textContent="Save Refill Data";
+    $("cancelRefillEditButton").hidden=true;
+    clearMessage("refillAddMessage");
+  }
+
+  async function deleteRefill(id){const r=refills.find(x=>num(x.id)===num(id));if(!r)return;if(!confirm(`Delete refill record ${refillName(r)} at ${recLocation(r)}? Its refill transaction history will also be removed.`))return;try{const result=await fetchData('/api/refill-record/delete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({refill_id:num(id)})});alert(result.message||'Refill record removed.');await loadAll(false)}catch(e){alert('Unable to remove refill record: '+e.message)}}
+
+  function switchView(view){activeView=view;document.querySelectorAll('.view').forEach(v=>v.classList.toggle('show',v.id==='view-'+view));document.querySelectorAll('.nav[data-view]').forEach(b=>b.classList.toggle('on',b.dataset.view===view));const titles={dash:'Dashboard',ops:'Issue / Return / Refill Toners',assets:'Add / Remove Asset',transactions:'Transaction History',inventory:'Inventory',email:'Email Settings'};$('pageTitle').textContent=titles[view]||'Dashboard';location.hash=view;if(view==='ops')renderOperationOptions();if(view==='email')loadEmailSettings()}
+  function switchSubView(name){activeSubView=name;document.querySelectorAll('[data-subview]').forEach(b=>b.classList.toggle('on',b.dataset.subview===name));['normalAsset','refillAsset','assetList','refillList'].forEach(n=>$('sub-'+n).classList.toggle('hidden',n!==name))}
+  function setCheckbox(id,value){$(id).checked=String(value??1)==='1'||String(value).toLowerCase()==='true'}
+
+  async function loadEmailSettings(){
+  clearMessage('emailSettingsMessage');$('emailSettingsStatus').textContent='Loading…';
+  try{const d=await fetchData('/api/settings');$('emailSmtpServer').value=d.smtp_server||d.smtp_host||'';$('emailSmtpPort').value=num(d.smtp_port,587);$('emailSmtpSecurity').value=['TLS','SSL','NONE'].includes(String(d.smtp_security||'').toUpperCase())?String(d.smtp_security).toUpperCase():(num(d.smtp_port,587)===465?'SSL':'TLS');$('emailSmtpUsername').value=d.smtp_username||'';$('emailSmtpPassword').value='';$('emailSmtpPassword').placeholder='Leave blank to keep the saved password';$('emailSender').value=d.sender_email||'';$('emailReceiver').value=d.alert_email||'';$('emailReceiver2').value=d.alert_email_2||'';$('emailMinimumStock').value=num(d.default_minimum_stock,5);setCheckbox('emailLowStock',d.low_stock_alert);setCheckbox('emailDangerStock',d.danger_alert);setCheckbox('emailDeadStock',d.dead_stock_alert);setCheckbox('emailOverstock',d.overstock_alert);$('emailSettingsStatus').textContent='Settings loaded'}catch(e){$('emailSettingsStatus').textContent='Load failed';setMessage('emailSettingsMessage','Could not load email settings: '+e.message,'error')}
+  }
+  function emailSettingsPayload(){return {smtp_host:$('emailSmtpServer').value.trim(),smtp_port:Number($('emailSmtpPort').value),smtp_security:$('emailSmtpSecurity').value,smtp_username:$('emailSmtpUsername').value.trim(),smtp_password:$('emailSmtpPassword').value,sender_email:$('emailSender').value.trim(),alert_email:$('emailReceiver').value.trim(),alert_email_2:$('emailReceiver2').value.trim(),low_stock_alert:$('emailLowStock').checked,danger_alert:$('emailDangerStock').checked,dead_stock_alert:$('emailDeadStock').checked,overstock_alert:$('emailOverstock').checked,default_minimum_stock:Number($('emailMinimumStock').value)}}
+  async function saveEmailSettings(showMessage=true){
+  const data=emailSettingsPayload();if(!data.smtp_host){setMessage('emailSettingsMessage','Enter the SMTP Server / Host.','error');return false}if(!Number.isInteger(data.smtp_port)||data.smtp_port<1||data.smtp_port>65535){setMessage('emailSettingsMessage','Enter a valid SMTP port.','error');return false}if(!data.alert_email){setMessage('emailSettingsMessage','Enter the recipient email address.','error');return false}if(!Number.isInteger(data.default_minimum_stock)||data.default_minimum_stock<1){setMessage('emailSettingsMessage','Default minimum stock must be at least 1.','error');return false}
+  const btn=$('saveEmailSettingsButton');btn.disabled=true;
+  try{const r=await fetchData('/api/settings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});$('emailSmtpPassword').value='';$('emailSettingsStatus').textContent='Saved';if(showMessage)setMessage('emailSettingsMessage',r.message||'Email settings saved successfully.','success');return true}catch(e){setMessage('emailSettingsMessage','Could not save email settings: '+e.message,'error');return false}finally{btn.disabled=false}
+  }
+
+  function configureEvents(){
+  document.querySelectorAll('.nav[data-view]').forEach(b=>b.addEventListener('click',()=>switchView(b.dataset.view)));
+  document.querySelectorAll('[data-subview]').forEach(b=>b.addEventListener('click',()=>switchSubView(b.dataset.subview)));
+  document.querySelectorAll('#operationTabs button').forEach(b=>b.addEventListener('click',()=>{
+    const previousType=$('opInventory').value;
+    operation=b.dataset.action;
+    if(operation==='REFILL')$('opInventory').value='refill';
+    if(previousType!==$('opInventory').value){selectedOperationRecordId=null;$('opRecord').value='';}
+    document.querySelectorAll('#operationTabs button').forEach(x=>x.classList.toggle('on',x===b));
+    renderOperationOptions();updateOperationButton();clearMessage('opMessage');
+  }));
+  $('opInventory').addEventListener('change',()=>{
+    if(operation==='REFILL'&&$('opInventory').value!=='refill'){
+      $('opInventory').value='refill';
+      setMessage('opMessage','Refill stock can only be added to Saved refill inventory.','error');
+      return;
+    }
+    selectedOperationRecordId=null;
+    $('opRecord').value='';
+    renderOperationOptions();
+    if(String($('opUser')?.value||'').trim())autoFillOperationFromUser();
+  });
+  $('opColour').addEventListener('change',()=>{selectedOperationRecordId=null;$('opRecord').value='';renderOperationOptions()});
+  function autoFillOperationFromUser(){
+    const type=$('opInventory')?.value||'normal';
+    const userName=String($('opUser')?.value||'').trim();
+    selectedOperationRecordId=null;
+    $('opRecord').value='';
+    if(!userName){renderOperationOptions();return}
+    const exactUser=users.find(u=>norm(u.full_name||u.name)===norm(userName));
+    if(!exactUser){renderOperationOptions();return}
+    const matches=operationRecordForUser(type, exactUser.full_name||exactUser.name);
+    renderOperationOptions();
+    if(matches.length===1){
+      selectedOperationRecordId=num(matches[0].id);
+      const option=operationRecordOptions(type, exactUser.full_name||exactUser.name).find(x=>num(x.id)===num(matches[0].id));
+      if(option)$('opRecord').value=option.label;
+      const colour=operationColour(matches[0]);
+      const colourSelect=$('opColour');
+      if(colourSelect && [...colourSelect.options].some(o=>norm(o.value)===norm(colour)))colourSelect.value=colour;
+      // Re-render with the matched colour while preserving the selected record ID.
+      renderOperationOptions();
+    }else if(matches.length>1){
+      setMessage('opMessage',`Found ${matches.length} inventory records for this user. Choose the correct Toner / Cartridge; location, colour, and stock will update automatically.`,'');
+    }else{
+      setMessage('opMessage','No inventory record is linked to this user for the selected Inventory Type.','error');
+    }
+    renderOperationSummary();
+  }
+  $('opUser').addEventListener('change',autoFillOperationFromUser);
+  $('opUser').addEventListener('input',()=>{if(users.some(u=>norm(u.full_name||u.name)===norm($('opUser').value.trim())))autoFillOperationFromUser()});
+  $('opRecord').addEventListener('input',()=>{selectedOperationRecordId=null;renderOperationSummary()});
+  $('opRecord').addEventListener('change',resolveOperationRecordSelection);
+  $('transactionSearch').addEventListener('input',renderTransactionTable);
+  $('inventorySearch').addEventListener('input',renderInventoryTable);
+  $('assetSearch').addEventListener('input',renderAssetTable);
+  $('refillSearch').addEventListener('input',renderRefillTable);
+
+  $('normalAssetForm').addEventListener('submit',async e=>{
+    e.preventDefault();clearMessage('assetMessage');
+
+    const payload={
+    asset_no:$('assetNo').value.trim(),
+    device_type:$('assetDeviceType').value,
+    asset_description:$('assetDescription').value.trim(),
+    user:$('assetUser').value.trim(),
+    location:$('assetLocation').value.trim(),
+    toner_model:$('assetModel').value.trim(),
+    toner_cartridge:$('assetToner').value.trim(),
+    colour:$('assetColour').value,
+    stock:Number($('assetStock').value),
+    minimum_stock:Number($('assetMinimum').value)
+    };
+
+    // Require a model name for real toner inventory so the saved model can
+    // be suggested next time and shown correctly in Issue / Return.
+    if(payload.device_type==='Printer'&&payload.stock>0&&!payload.toner_model){
+      setMessage('assetMessage','Enter the normal toner or cartridge model. This model will be saved for future selection.','error');
+      $('assetModel').focus();
+      return;
+    }
+    if(payload.toner_cartridge&&!payload.toner_model){
+      setMessage('assetMessage','Enter the Toner / Cartridge Model before choosing a part type.','error');
+      $('assetModel').focus();
+      return;
+    }
+    if(payload.toner_model&&!payload.toner_cartridge){
+      payload.toner_cartridge='Toner';
+      $('assetToner').value='Toner';
+    }
+    if(payload.device_type==='Scanner'&&payload.stock>0&&!payload.toner_model){
+      setMessage('assetMessage','Scanner records cannot hold toner stock. Set Initial Stock to 0, or enter a toner model if this is actually a toner-equipped printer.','error');
+      return;
+    }
+
+    const isEditing=editingAssetId!==null;
+    if(isEditing)payload.asset_id=editingAssetId;
+
+    try{
+    const endpoint=isEditing?'/api/assets/edit':(payload.toner_model?'/api/add-toner':'/api/assets/add');
+    const result=await fetchData(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+
+    editingAssetId=null;
+    $('normalAssetForm').reset();
+    $('assetSubmitButton').textContent='Save Asset & Toner';
+    $('cancelAssetEditButton').hidden=true;
+
+    await loadAll(false);
+
+    if(isEditing){
+      switchSubView('assetList');
+      setMessage('assetMessage',result.message||'Asset updated successfully.','success');
+    }else{
+      switchSubView('assetList');
+      setMessage('assetMessage',result.message||'Normal toner / asset saved. Its model is now available for future selection.','success');
+    }
+    }catch(err){setMessage('assetMessage',err.message,'error')}
+  });
+
+  $('refillAssetForm').addEventListener('submit',async e=>{
+    e.preventDefault();clearMessage('refillAddMessage');
+    const payload={
+      refill_name:$('refillDescription').value.trim(),
+      asset_no:$('refillAssetNo').value.trim(),
+      user:$('refillUser').value.trim(),
+      assigned_user:$('refillUser').value.trim(),
+      toner_cartridge:$('refillCartridge').value.trim(),
+      colour:$('refillColour').value,
+      location:$('refillLocation').value.trim(),
+      stock:Number($('refillStock').value),
+      minimum_stock:Number($('refillMinimum').value)
+    };
+    const formEditId=Number($('refillAssetForm').dataset.editingRefillId||0);
+    const activeEditId=formEditId>0?formEditId:Number(editingRefillId||0);
+    const isEditing=activeEditId>0;
+    if(!payload.refill_name||!payload.asset_no||!payload.location||(!isEditing&&(!payload.user||!payload.toner_cartridge))){
+      setMessage('refillAddMessage','Please complete all required refill fields.','error');return;
+    }
+    if(!Number.isInteger(payload.stock)||payload.stock<0||!Number.isInteger(payload.minimum_stock)||payload.minimum_stock<1){
+      setMessage('refillAddMessage','Stock must be 0 or greater and minimum stock must be at least 1.','error');return;
+    }
+    if(isEditing)payload.refill_id=activeEditId;
+    const submitButton=$('refillSubmitButton');
+    submitButton.disabled=true;
+    try{
+      const endpoint=isEditing?'/api/edit-refill-toner':'/api/add-refill-toner';
+      const r=await fetchData(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+
+      // Immediately update the on-screen row from the server response, keyed by
+      // its database ID. Then read the database again to confirm the saved values.
+      let refreshWarning='';
+      const saved=r.refill||{
+        id:activeEditId||r.id,
+        refill_name:payload.refill_name,
+        asset_no:payload.asset_no,
+        user:payload.user,
+        assigned_user:payload.assigned_user,
+        toner_cartridge:payload.toner_cartridge,
+        colour:payload.colour,
+        location:payload.location,
+        stock:payload.stock,
+        quantity:payload.stock,
+        minimum_stock:payload.minimum_stock
+      };
+      saved.id=Number(saved.id||activeEditId||0);
+      saved.quantity=Number(saved.quantity??saved.stock??payload.stock);
+      saved.stock=Number(saved.stock??saved.quantity??payload.stock);
+      saved.user=saved.user||saved.assigned_user||payload.user;
+      saved.assigned_user=saved.assigned_user||saved.user||payload.assigned_user;
+      saved.asset_location=saved.asset_location||saved.location||payload.location;
+      const savedIndex=refills.findIndex(item=>Number(item.id)===Number(saved.id));
+      if(savedIndex>=0)refills[savedIndex]={...refills[savedIndex],...saved};
+      else if(saved.id>0)refills.unshift(saved);
+      renderRefillTable();
+      try{
+        const latest=await fetchData('/api/refill-toners');
+        if(!Array.isArray(latest.refill_toners))throw new Error('The refill list response was not valid.');
+        refills=latest.refill_toners;
+        renderRefillTable();
+      }catch(refreshError){
+        refreshWarning=' The server accepted the save and the changed row is displayed, but the list could not be rechecked; reload the page to verify.';
+      }
+
+      editingRefillId=null;
+      delete $('refillAssetForm').dataset.editingRefillId;
+      $('refillAssetForm').reset();
+      $('refillUser').required=true;
+      $('refillCartridge').required=true;
+      $('refillSubmitButton').textContent='Save Refill Data';
+      $('cancelRefillEditButton').hidden=true;
+      clearMessage('refillAddMessage');
+      switchSubView('refillList');
+      setMessage('refillListMessage',(r.message||(isEditing?'Refill inventory updated successfully.':'Refill inventory saved successfully.'))+refreshWarning,'success');
+    }catch(err){setMessage('refillAddMessage','Could not '+(isEditing?'update':'save')+' refill inventory: '+err.message,'error')}
+    finally{submitButton.disabled=false}
+  });
+
+  $('emailSettingsForm').addEventListener('submit',async e=>{e.preventDefault();await saveEmailSettings(true)});
+  $('testEmailButton').addEventListener('click',async()=>{clearMessage('emailSettingsMessage');const saved=await saveEmailSettings(false);if(!saved)return;const btn=$('testEmailButton');btn.disabled=true;try{const r=await fetchData('/api/test-email',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({})});setMessage('emailSettingsMessage',r.message||'Test email sent successfully.','success');$('emailSettingsStatus').textContent='Test email sent'}catch(e){setMessage('emailSettingsMessage','Test email failed: '+e.message,'error');$('emailSettingsStatus').textContent='Test failed'}finally{btn.disabled=false}});
+  $('reloadEmailSettingsButton').addEventListener('click',loadEmailSettings);
+  }
+
+  configureEvents();
+  const startingView=(location.hash||'').replace('#','');
+  if(['dash','ops','assets','transactions','inventory','email'].includes(startingView))switchView(startingView);
+  if(['normalAsset','refillAsset','assetList','refillList'].includes(startingView))switchView('assets');
+  loadAll(true);
+  setInterval(()=>loadAll(false),300000);
+  </script>
+  </body>
+  </html>

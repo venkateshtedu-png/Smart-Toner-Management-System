@@ -1,0 +1,35 @@
+# Python environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Local databases and SQLite sidecar files
+*.db
+*.db-*
+*.sqlite
+*.sqlite3
+*.sqlite-*
+
+# Credentials and local environment files
+.env
+.env.*
+!.env.example
+
+# Real/exported data, backups and logs
+*.csv
+*.xlsx
+*.xls
+*.jsonl
+*.log
+backups/
+data/
+instance/
+uploads/
+
+# Editor/system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
